@@ -4,6 +4,7 @@ module PWM_Gen_tb #(
     parameter CLK_FREQ_MHZ          = 50.0,
     parameter TESTBENCH_DURATION_MS = 100,
 
+    parameter     PWM_FREQ_DIV     = 32,
     parameter     PWM_PERIOD_BITS  = 16,
     parameter     PWM_PERIOD       = {PWM_PERIOD_BITS{1'b1}},
     parameter     PWM_BRIGHTNESS   = 0.65,
@@ -25,6 +26,7 @@ PWM_Gen #(
     .clk    (clk),
     .resetn (resetn),
 
+    .freq_div   (PWM_FREQ_DIV),
     .inv        (PWM_INVERSION),
     .pwm_period (PWM_PERIOD),
     .pwm_pulse  (PWM_PULSE),
