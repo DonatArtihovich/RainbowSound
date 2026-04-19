@@ -1,3 +1,4 @@
+![Aesthetic photo](image.png)
 # RaInBoW sOuNd
 
 ## !!!Welcome to the f*cking hype GENERATOR!!!
