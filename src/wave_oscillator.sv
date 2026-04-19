@@ -14,8 +14,7 @@ module wave_oscillator #(
     input wire [7 : 0] amp,
     input wire [7 : 0] amp_div,
     
-    input wire        [$clog2(LUT_BYTES) - 1 : 0] phase,
-    input wire signed [$clog2(LUT_BYTES) - 1 : 0] phase_shift,
+    input wire [$clog2(LUT_BYTES) - 1 : 0] phase,
     
     output reg [SAMPLE_BITS - 1 : 0] sample_tdata  = 0,
     output reg                       sample_tvalid = 0
@@ -76,19 +75,12 @@ initial begin: LUT_INIT
     end
 end
 
-wire signed [PHASE_BITS - 1 : 0] phase_shifted = phase + phase_shift;
-wire [PHASE_BITS - 1 : 0] phase_i = (phase_shifted > LUT_BYTES
-                                         ? phase_shifted - LUT_BYTES
-                                         : (phase_shifted < 0
-                                             ? LUT_BYTES + phase_shifted
-                                             : phase_shifted));
-
 always @(posedge clk) begin
     if (~resetn) begin
         sample_tdata  <= 0;
         sample_tvalid <= 0;
     end else begin
-        sample_tdata  <= lut[phase_i] * (amp / amp_div);
+        sample_tdata  <= lut[phase] * (amp / amp_div);
         sample_tvalid <= 1;
     end
 end
