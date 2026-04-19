@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module PWM_Gen #(
+module pwm_gen #(
     parameter PWM_PERIOD_BITS = 16
 ) (
     input wire clk,

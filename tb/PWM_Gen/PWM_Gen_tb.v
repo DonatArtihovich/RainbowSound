@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module PWM_Gen_tb #(
+module pwm_gen_tb #(
     parameter CLK_FREQ_MHZ          = 50.0,
     parameter TESTBENCH_DURATION_MS = 100,
 
@@ -20,7 +20,7 @@ always #(500 / CLK_FREQ_MHZ) clk <= ~clk;
 
 wire pwm_out;
 
-PWM_Gen #(
+pwm_gen #(
     .PWM_PERIOD_BITS (PWM_PERIOD_BITS)
 ) UUT (
     .clk    (clk),
@@ -50,7 +50,7 @@ end
 
 initial begin: init_rst
     #100; resetn <= 1;
-    $display("Start PWM_Gen testbench, PWM Period = %d ticks, PWM brightness = %.2lf%%", PWM_PERIOD, PWM_BRIGHTNESS);
+    $display("Start pwm_gen testbench, PWM Period = %d ticks, PWM brightness = %.2lf%%", PWM_PERIOD, PWM_BRIGHTNESS);
     #(TESTBENCH_DURATION_MS * 1_000_000);
     
     $display("Total brightness: %d%%", pos_cnt * 100.0 / (pos_cnt + neg_cnt));
