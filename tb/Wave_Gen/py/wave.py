@@ -10,8 +10,6 @@ with open(WAVE_FILE, 'rb') as f:
     for i in range(SAMPLES_READ):
         data.append(int.from_bytes(f.read(SAMPLE_BITS >> 3)))
 
-dat2 = [1 - 2 * abs((i - 16) / 32) for i in range(32)]
-
 plt.plot(list(range(SAMPLES_READ)), data, color='green', linestyle='-', marker='o')
 
 plt.title("Wave")
