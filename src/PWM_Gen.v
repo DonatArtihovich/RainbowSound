@@ -25,7 +25,7 @@ always @(posedge clk) begin
     end else begin
         div_cnt <= div_cnt + 1;
 
-        if (div_cnt == freq_div - 1) begin
+        if (div_cnt == freq_div - 1 || !freq_div) begin
             dur_cnt <= (dur_cnt < pwm_period)? dur_cnt + 1 : 0;
             div_cnt <= 0;
         end
