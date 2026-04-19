@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module wave_gen #(
     parameter [1 : 0] WAVE_TYPE = 0,
     parameter         LUT_BYTES = 32,
@@ -37,12 +39,9 @@ always @(posedge clk) begin
         phase    <= 0;
         freq_cnt <= 0;
     end else if (gen_en) begin
-        freq_cnt <= freq_cnt + 1;
+        freq_cnt <= freq_cnt == freq_div - 1? 0 : freq_cnt + 1;
 
-        if (!freq_div || freq_cnt == freq_div - 1) begin
-            freq_cnt <= 0;
-            phase    <= (phase == LUT_BYTES - 1)? 0 : phase + 1;
-        end
+        if (!freq_div || freq_cnt == freq_div - 2) phase <= (phase == LUT_BYTES - 1)? 0 : phase + 1;
     end
 end
 
