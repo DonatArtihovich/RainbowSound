@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module SupersawWave_Synth #(
-    parameter         FREQ_DIV_MUL = 256,
+    parameter         FREQ_DIV_MUL = 40,
 
     parameter         LUT_BYTES = 32,
     parameter         SAMPLE_BITS = 8

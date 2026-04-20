@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module SimpleWave_Synth #(
-    parameter         FREQ_DIV_MUL = 256,
+    parameter         FREQ_DIV_MUL = 40,
 
     parameter [1 : 0] WAVE_TYPE = 0,
     parameter         LUT_BYTES = 32,
