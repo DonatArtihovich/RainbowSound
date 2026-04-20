@@ -12,8 +12,8 @@ module wave_gen #(
 
     input wire [31 : 0] freq_div,
 
-    input wire [7 : 0] amp_mul,
-    input wire [7 : 0] amp_div,
+    input wire [31 : 0] amp_mul,
+    input wire [31 : 0] amp_div,
     
     input wire signed [$clog2(LUT_BYTES) - 1 : 0] phase_shift,
 

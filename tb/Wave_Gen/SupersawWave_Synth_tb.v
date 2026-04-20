@@ -1,12 +1,11 @@
 `timescale 1ns / 1ps
 
-module SimpleWave_Synth_tb #(
+module SupersawWave_Synth_tb #(
     parameter CLK_FREQ_MHZ          = 50,
-    parameter TESTBENCH_DURATION_MS = 100,
+    parameter TESTBENCH_DURATION_MS = 50,
 
     parameter WAVE_FILE_PATH = "../../../out/wave.dat",
 
-    parameter reg [1 : 0] WAVE_TYPE   = 3, // SINE
     parameter             LUT_BYTES   = 32,
     parameter             SAMPLE_BITS = 8,
 
@@ -29,10 +28,8 @@ wire pwm_out;
 
 reg [SAMPLE_BITS - 1 : 0] pwm_period = PWM_PERIOD_0;
 
-SimpleWave_Synth #(
+SupersawWave_Synth #(
     .FREQ_DIV_MUL (FREQ_DIV_MUL),
-
-    .WAVE_TYPE (WAVE_TYPE),
     .LUT_BYTES (LUT_BYTES),
     .SAMPLE_BITS (SAMPLE_BITS)
 )
@@ -75,8 +72,6 @@ always @(posedge clk) begin
         end
     end 
 end
-
-
 
 initial begin: init_rst
     fid = $fopen(WAVE_FILE_PATH, "wb");

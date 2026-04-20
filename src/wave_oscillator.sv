@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-`define LUT_FROM_FILE 1
+`define LUT_FROM_FILE 0
 
 module wave_oscillator #(
     parameter real PI = 3.141592653589793,
@@ -13,8 +13,8 @@ module wave_oscillator #(
     input wire clk,
     input wire resetn,
     
-    input wire [7 : 0] amp_mul,
-    input wire [7 : 0] amp_div,
+    input wire [31 : 0] amp_mul,
+    input wire [31 : 0] amp_div,
     
     input wire [$clog2(LUT_BYTES) - 1 : 0] phase,
     input wire [SAMPLE_BITS - 1 : 0]       sample_max,

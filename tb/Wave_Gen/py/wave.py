@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
-WAVE_FILE = 'D:/VivadoProjects/WaveOscillation/project_1/out/wave.dat'
-SAMPLES_READ = int(10000 * 4 * 0.81)
+WAVE_FILE = 'D:/VivadoProjects/WaveOscillation/project_2/out/wave.dat'
+SAMPLES_READ = 6400 * 2
 SAMPLE_BITS = 8
 
 data = list()
