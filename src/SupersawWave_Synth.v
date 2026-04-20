@@ -62,9 +62,6 @@ wave_gen #(
     .sample_tvalid (wave_tvalid[0])
 );
 
-// assign sample_tdata = wave_tdata[0];
-// assign sample_tvalid = wave_tvalid[0];
-
 wave_gen #(
     .WAVE_TYPE (3'b11),
     .LUT_BYTES (LUT_BYTES),
@@ -125,11 +122,6 @@ wave_gen #(
     .sample_tvalid (wave_tvalid[3])
 );
 
-// wire [SAMPLE_BITS - 1 : 0] wave_0_tdata = wave_tdata[0];
-// wire [SAMPLE_BITS - 1 : 0] wave_1_tdata = wave_tdata[1];
-// wire [SAMPLE_BITS - 1 : 0] wave_2_tdata = wave_tdata[2];
-// wire [SAMPLE_BITS - 1 : 0] wave_3_tdata = wave_tdata[3];
-
 add_mixer #(
     .OSC_QTY     (OSC_QTY),
     .SAMPLE_BITS (SAMPLE_BITS)
@@ -141,11 +133,6 @@ add_mixer #(
     .wave_tdata  ({wave_tdata[3], wave_tdata[2], wave_tdata[1], wave_tdata[0]}),
     .wave_tvalid (wave_tvalid)
 );
-
-// assign add_mixer_i.wave_tdata[0] = wave_tdata[0];
-// assign add_mixer_i.wave_tdata[1] = wave_tdata[1];
-// assign add_mixer_i.wave_tdata[2] = wave_tdata[2];
-// assign add_mixer_i.wave_tdata[3] = wave_tdata[3];
 
 pwm_gen #(
     .PWM_PERIOD_BITS (SAMPLE_BITS)
