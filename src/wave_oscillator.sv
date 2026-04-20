@@ -1,5 +1,7 @@
 `timescale 1ns / 1ps
 
+`define LUT_FROM_FILE 1
+
 module wave_oscillator #(
     parameter real PI = 3.141592653589793,
 
@@ -44,7 +46,7 @@ endfunction
 function [SAMPLE_BITS - 1 : 0] square_gen;
     input [PHASE_BITS - 1 : 0] phase;
     begin
-        square_gen = $sin(2 * PI * phase / LUT_BYTES) > 0? MAX_SAMPLE : 0;
+        square_gen = phase < (LUT_BYTES / 2)? MAX_SAMPLE : 0;
     end
 endfunction
 
@@ -66,13 +68,17 @@ endfunction
 
 integer i;
 initial begin: LUT_INIT
-    for (i = 0; i < LUT_BYTES; i = i + 1) begin
-        case (WAVE_TYPE)
-        WSINE:     lut[i] <= sine_gen(i + 1);
-        WSQUARE:   lut[i] <= square_gen(i + 1);
-        WTRIANGLE: lut[i] <= triangle_gen(i + 1);
-        WSAW:      lut[i] <= saw_gen(i + 1);
-        endcase
+    if (!`LUT_FROM_FILE || WAVE_TYPE != WSINE) begin
+        for (i = 0; i < LUT_BYTES; i = i + 1) begin
+            case (WAVE_TYPE)
+            WSINE:     lut[i] <= sine_gen(i + 1);
+            WSQUARE:   lut[i] <= square_gen(i + 1);
+            WTRIANGLE: lut[i] <= triangle_gen(i + 1);
+            WSAW:      lut[i] <= saw_gen(i + 1);
+            endcase
+        end
+    end else begin
+        $readmemh("lut.mif", lut);
     end
 end
 
