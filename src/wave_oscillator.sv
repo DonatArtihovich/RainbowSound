@@ -11,7 +11,7 @@ module wave_oscillator #(
     input wire clk,
     input wire resetn,
     
-    input wire [7 : 0] amp,
+    input wire [7 : 0] amp_mul,
     input wire [7 : 0] amp_div,
     
     input wire [$clog2(LUT_BYTES) - 1 : 0] phase,
@@ -76,7 +76,7 @@ initial begin: LUT_INIT
     end
 end
 
-wire [SAMPLE_BITS - 1 : 0] sample_gen = lut[phase] * sample_max / MAX_SAMPLE * (amp / amp_div);
+wire [SAMPLE_BITS - 1 : 0] sample_gen = lut[phase] * sample_max / MAX_SAMPLE * amp_mul / amp_div;
 
 always @(posedge clk) begin
     if (~resetn) begin

@@ -2,7 +2,7 @@
 
 module SimpleWave_Synth_tb #(
     parameter CLK_FREQ_MHZ          = 50,
-    parameter TESTBENCH_DURATION_MS = 200,
+    parameter TESTBENCH_DURATION_MS = 400,
 
     parameter WAVE_FILE_PATH = "../../../out/wave.dat",
 
@@ -10,7 +10,10 @@ module SimpleWave_Synth_tb #(
     parameter             LUT_BYTES   = 32,
     parameter             SAMPLE_BITS = 8,
 
-    parameter             FREQ_DIV_MUL = 40,
+    parameter             FREQ_DIV_MUL = 400,
+
+    parameter             AMP_MUL = 2,
+    parameter             AMP_DIV = 10,
 
     parameter             PWM_PERIOD_0 = 255,
     parameter             PWM_PERIOD_1 = 127
@@ -38,6 +41,8 @@ UUT
     .clk    (clk),
     .resetn (resetn),
 
+    .amp_mul    (AMP_MUL),
+    .amp_div    (AMP_DIV),
     .pwm_period (pwm_period),
 
     .gen_en  (gen_en),

@@ -10,6 +10,8 @@ module SimpleWave_Synth #(
     input wire  clk,
     input wire  resetn,
 
+    input wire  [7 : 0]               amp_mul,
+    input wire  [7 : 0]               amp_div,
     input wire  [SAMPLE_BITS - 1 : 0] pwm_period,
 
     input wire  gen_en,
@@ -47,10 +49,10 @@ wave_gen #(
 
     .gen_en (gen_en),
     
-    .sample_max (pwm_period_reg),
-    .freq_div   (freq_div),
-    .amp     (1),
-    .amp_div (1),
+    .sample_max  (pwm_period_reg),
+    .freq_div    (freq_div),
+    .amp_mul     (amp_mul),
+    .amp_div     (amp_div),
     .phase_shift (0),
 
     .sample_tdata  (sample_tdata),

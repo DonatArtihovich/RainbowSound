@@ -12,7 +12,7 @@ module wave_gen #(
 
     input wire [31 : 0] freq_div,
 
-    input wire [7 : 0] amp,
+    input wire [7 : 0] amp_mul,
     input wire [7 : 0] amp_div,
     
     input wire signed [$clog2(LUT_BYTES) - 1 : 0] phase_shift,
@@ -23,12 +23,10 @@ module wave_gen #(
     output wire                       sample_tvalid
 );
 
-localparam PHASE_BITS = $clog2(LUT_BYTES);
-
 reg [$clog2(LUT_BYTES) - 1 : 0] phase = 0;
 
-wire signed [PHASE_BITS - 1 : 0] phase_shifted = phase + phase_shift;
-wire [PHASE_BITS - 1 : 0] phase_i = (phase_shifted > LUT_BYTES
+wire signed [$clog2(LUT_BYTES) - 1 : 0] phase_shifted = phase + phase_shift;
+wire [$clog2(LUT_BYTES) - 1 : 0] phase_i = (phase_shifted > LUT_BYTES
                                          ? phase_shifted - LUT_BYTES
                                          : (phase_shifted < 0
                                              ? LUT_BYTES + phase_shifted
@@ -57,7 +55,7 @@ wave_oscillator #(
     .clk    (clk),
     .resetn (resetn),
 
-    .amp     (amp),
+    .amp_mul (amp_mul),
     .amp_div (amp_div),
 
     .phase         (phase_i),
