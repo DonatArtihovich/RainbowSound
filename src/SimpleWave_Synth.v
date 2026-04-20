@@ -1,8 +1,6 @@
 `timescale 1ns / 1ps
 
 module SimpleWave_Synth #(
-    parameter         FREQ_DIV_MUL = 40,
-
     parameter [1 : 0] WAVE_TYPE = 0,
     parameter         LUT_BYTES = 32,
     parameter         SAMPLE_BITS = 8
@@ -10,6 +8,7 @@ module SimpleWave_Synth #(
     input wire  clk,
     input wire  resetn,
 
+    input wire  [7 : 0]               freq_div_mul,
     input wire  [7 : 0]               amp_mul,
     input wire  [7 : 0]               amp_div,
     input wire  [SAMPLE_BITS - 1 : 0] pwm_period,
@@ -21,7 +20,7 @@ module SimpleWave_Synth #(
 
 
 reg [SAMPLE_BITS - 1 : 0] pwm_period_reg = {SAMPLE_BITS{1'b1}};
-wire [31 : 0] freq_div = (pwm_period_reg + 1) * FREQ_DIV_MUL;
+wire [31 : 0] freq_div = (pwm_period_reg + 1) * freq_div_mul;
 
 reg [31 : 0] freq_cnt = 0;
 

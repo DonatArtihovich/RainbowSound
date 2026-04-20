@@ -30,8 +30,6 @@ wire pwm_out;
 reg [SAMPLE_BITS - 1 : 0] pwm_period = PWM_PERIOD_0;
 
 SimpleWave_Synth #(
-    .FREQ_DIV_MUL (FREQ_DIV_MUL),
-
     .WAVE_TYPE (WAVE_TYPE),
     .LUT_BYTES (LUT_BYTES),
     .SAMPLE_BITS (SAMPLE_BITS)
@@ -41,9 +39,10 @@ UUT
     .clk    (clk),
     .resetn (resetn),
 
-    .amp_mul    (AMP_MUL),
-    .amp_div    (AMP_DIV),
-    .pwm_period (pwm_period),
+    .freq_div_mul (FREQ_DIV_MUL),
+    .amp_mul      (AMP_MUL),
+    .amp_div      (AMP_DIV),
+    .pwm_period   (pwm_period),
 
     .gen_en  (gen_en),
     .pwm_out (pwm_out)
