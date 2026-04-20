@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module SimpleWave_Synth #(
-    parameter         FREQ_DIV = 256, // Must be [256; 0xFFFFFFFF] and be multiple of 256
+    parameter         FREQ_DIV_MUL = 256,
 
     parameter [1 : 0] WAVE_TYPE = 0,
     parameter         LUT_BYTES = 32,
@@ -10,10 +10,29 @@ module SimpleWave_Synth #(
     input wire  clk,
     input wire  resetn,
 
+    input wire  [SAMPLE_BITS - 1 : 0] pwm_period,
+
     input wire  gen_en,
 
     output wire pwm_out
 );
+
+
+reg [SAMPLE_BITS - 1 : 0] pwm_period_reg = {SAMPLE_BITS{1'b1}};
+wire [31 : 0] freq_div = (pwm_period_reg + 1) * FREQ_DIV_MUL;
+
+reg [31 : 0] freq_cnt = 0;
+
+always @(posedge clk) begin
+    if (~resetn) begin
+        pwm_period_reg <= {SAMPLE_BITS{1'b1}};
+        freq_cnt       <= 0;
+    end else if (gen_en) begin
+        freq_cnt <= freq_cnt == freq_div - 1? 0 : freq_cnt + 1;
+
+        if (!freq_div || freq_cnt == freq_div - 1) pwm_period_reg <= pwm_period;
+    end
+end
 
 wire [SAMPLE_BITS - 1 : 0] sample_tdata;
 wire                       sample_tvalid;
@@ -27,8 +46,9 @@ wave_gen #(
     .resetn (resetn),
 
     .gen_en (gen_en),
-
-    .freq_div (FREQ_DIV),
+    
+    .sample_max (pwm_period_reg),
+    .freq_div   (freq_div),
     .amp     (1),
     .amp_div (1),
     .phase_shift (0),
@@ -45,7 +65,7 @@ pwm_gen #(
 
     .freq_div   (0),
     .inv        (0),
-    .pwm_period ({SAMPLE_BITS{1'b1}}),
+    .pwm_period (pwm_period_reg),
     .pwm_pulse  (sample_tdata),
     .pwm_out    (pwm_out)
 );

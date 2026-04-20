@@ -17,6 +17,8 @@ module wave_gen #(
     
     input wire signed [$clog2(LUT_BYTES) - 1 : 0] phase_shift,
 
+    input wire [SAMPLE_BITS - 1 : 0] sample_max,
+
     output wire [SAMPLE_BITS - 1 : 0] sample_tdata,
     output wire                       sample_tvalid
 );
@@ -59,6 +61,8 @@ wave_oscillator #(
     .amp_div (amp_div),
 
     .phase         (phase_i),
+    .sample_max    (sample_max),
+
     .sample_tdata  (sample_tdata),
     .sample_tvalid (wosc_tvalid)
 );

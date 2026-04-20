@@ -15,6 +15,7 @@ module wave_oscillator #(
     input wire [7 : 0] amp_div,
     
     input wire [$clog2(LUT_BYTES) - 1 : 0] phase,
+    input wire [SAMPLE_BITS - 1 : 0]       sample_max,
     
     output reg [SAMPLE_BITS - 1 : 0] sample_tdata  = 0,
     output reg                       sample_tvalid = 0
@@ -22,7 +23,7 @@ module wave_oscillator #(
 
 localparam PHASE_BITS = $clog2(LUT_BYTES);
 
-localparam MAX_SAMPLE = {SAMPLE_BITS{1'b1}};
+localparam MAX_SAMPLE = ({(SAMPLE_BITS - 1){1'b1}} + 1);
 
 reg [SAMPLE_BITS - 1 : 0] lut [0 : LUT_BYTES - 1];
 
@@ -75,12 +76,14 @@ initial begin: LUT_INIT
     end
 end
 
+wire [SAMPLE_BITS - 1 : 0] sample_gen = lut[phase] * sample_max / MAX_SAMPLE * (amp / amp_div);
+
 always @(posedge clk) begin
     if (~resetn) begin
         sample_tdata  <= 0;
         sample_tvalid <= 0;
     end else begin
-        sample_tdata  <= lut[phase] * (amp / amp_div);
+        sample_tdata  <= sample_gen;
         sample_tvalid <= 1;
     end
 end

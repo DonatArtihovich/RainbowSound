@@ -2,7 +2,7 @@
 
 module SimpleWave_Synth_tb #(
     parameter CLK_FREQ_MHZ          = 50,
-    parameter TESTBENCH_DURATION_MS = 50,
+    parameter TESTBENCH_DURATION_MS = 200,
 
     parameter WAVE_FILE_PATH = "../../../out/wave.dat",
 
@@ -10,7 +10,10 @@ module SimpleWave_Synth_tb #(
     parameter             LUT_BYTES   = 32,
     parameter             SAMPLE_BITS = 8,
 
-    parameter             FREQ_DIV    = 10240
+    parameter             FREQ_DIV_MUL = 40,
+
+    parameter             PWM_PERIOD_0 = 255,
+    parameter             PWM_PERIOD_1 = 127
 );
 
 reg clk = 0;
@@ -21,8 +24,10 @@ always #(500 / CLK_FREQ_MHZ) clk <= ~clk;
 
 wire pwm_out;
 
+reg [SAMPLE_BITS - 1 : 0] pwm_period = PWM_PERIOD_0;
+
 SimpleWave_Synth #(
-    .FREQ_DIV (FREQ_DIV),
+    .FREQ_DIV_MUL (FREQ_DIV_MUL),
 
     .WAVE_TYPE (WAVE_TYPE),
     .LUT_BYTES (LUT_BYTES),
@@ -32,6 +37,8 @@ UUT
 (
     .clk    (clk),
     .resetn (resetn),
+
+    .pwm_period (pwm_period),
 
     .gen_en  (gen_en),
     .pwm_out (pwm_out)
@@ -64,11 +71,21 @@ always @(posedge clk) begin
     end 
 end
 
+
+
 initial begin: init_rst
     fid = $fopen(WAVE_FILE_PATH, "wb");
     #100; resetn <= 1; gen_en <= 1;
 
-    #(1_000_000 * TESTBENCH_DURATION_MS);
+    #(1_000_000 * TESTBENCH_DURATION_MS / 6.0);
+    pwm_period <= PWM_PERIOD_1;
+    #(1_000_000 * TESTBENCH_DURATION_MS / 6.0);
+    pwm_period <= PWM_PERIOD_0;
+    #(1_000_000 * TESTBENCH_DURATION_MS / 6.0);
+    pwm_period <= PWM_PERIOD_1;
+    #(1_000_000 * TESTBENCH_DURATION_MS / 6.0);
+    pwm_period <= PWM_PERIOD_0;
+    #(1_000_000 * TESTBENCH_DURATION_MS / 6.0);
     $fclose(fid);
     $finish;
 end
